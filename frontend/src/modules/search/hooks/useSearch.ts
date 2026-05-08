@@ -8,8 +8,8 @@ export function useSearch() {
   const page = parseInt(searchParams.get('page') || '1');
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['search', 'github', query, page],
-    queryFn: () => searchApi.searchGithub({ q: query, page, per_page: 10 }),
+    queryKey: ['search', 'repos', query, page],
+    queryFn: () => searchApi.searchReposMerged({ q: query, page, per_page: 10 }),
     enabled: !!query,
   });
 

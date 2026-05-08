@@ -33,9 +33,24 @@ export interface GithubSearchItem {
   updated_at: string;
 }
 
+/** 合并搜索的单条记录（GitHub + Gitee） */
+export type RepoSearchItem = GithubSearchItem & {
+  source: 'github' | 'gitee';
+};
+
 export interface GithubSearchResponse {
   total_count: number;
   page: number;
   per_page: number;
   items: GithubSearchItem[];
+}
+
+/** GET /search/repos 单次请求两源合并 */
+export interface MergedRepoSearchResponse {
+  page: number;
+  per_page: number;
+  github_total_count: number;
+  items: RepoSearchItem[];
+  github_error?: string | null;
+  gitee_error?: string | null;
 }

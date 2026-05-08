@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     CORS_ORIGINS: List[str] = ["http://localhost:3000"]
     
     GITHUB_API_TOKEN: str = ""
+    # Gitee OpenAPI v5 私人令牌，用于搜索仓库；不配置时仍尝试匿名（可能被限流或返回空）
+    GITEE_ACCESS_TOKEN: str = ""
     
     class Config:
         env_file = ".env"

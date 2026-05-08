@@ -1,8 +1,13 @@
-import { GithubSearchItem } from '@/lib/api/types';
+import { RepoSearchItem } from '@/lib/api/types';
 
 interface SearchResultCardProps {
-  item: GithubSearchItem;
+  item: RepoSearchItem;
 }
+
+const SOURCE_LABEL: Record<RepoSearchItem['source'], string> = {
+  github: 'GitHub',
+  gitee: 'Gitee',
+};
 
 export function SearchResultCard({ item }: SearchResultCardProps) {
   return (
@@ -22,6 +27,9 @@ export function SearchResultCard({ item }: SearchResultCardProps) {
           </p>
         </div>
         <div className="flex items-center gap-4 text-sm text-gray-500 shrink-0">
+          <span className="px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+            {SOURCE_LABEL[item.source]}
+          </span>
           <span className="flex items-center gap-1">
             <span>⭐</span>
             <span>{item.stargazers_count.toLocaleString()}</span>

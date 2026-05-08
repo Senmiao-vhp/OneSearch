@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import { GithubSearchResponse } from './types';
+import { MergedRepoSearchResponse } from './types';
 
 export interface SearchParams {
   q: string;
@@ -7,9 +7,11 @@ export interface SearchParams {
   per_page?: number;
 }
 
-/** 与 FastAPI GithubSearchResponse 一致，直连 JSON，无外层 { code, data } */
+/** 单次请求拉取 GitHub + Gitee 合并结果 */
 export const searchApi = {
-  searchGithub: async (params: SearchParams): Promise<GithubSearchResponse> => {
-    return apiClient.get('/search/github', params);
+  searchReposMerged: async (
+    params: SearchParams
+  ): Promise<MergedRepoSearchResponse> => {
+    return apiClient.get('/search/repos', params);
   },
 };

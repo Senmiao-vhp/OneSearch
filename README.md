@@ -54,6 +54,10 @@ uvicorn app.main:app --reload --port 8000
 DATABASE_URL=postgresql://user:password@localhost:5432/onesearch
 JWT_SECRET_KEY=your-secret-key
 CORS_ORIGINS=http://localhost:3000
+# 可选：提升 GitHub API 限额
+GITHUB_API_TOKEN=
+# 可选：Gitee 搜索仓库（OpenAPI v5），建议配置私人令牌以提高可用性
+GITEE_ACCESS_TOKEN=
 ```
 
 ### 前端 (.env.local)
@@ -77,7 +81,8 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 
 | 方法 | 路径 | 描述 |
 |------|------|------|
-| GET | /api/v1/search/github | GitHub仓库搜索 |
+| GET | /api/v1/search/repos | GitHub+Gitee 仓库合并搜索（一次请求、按 Star 合并排序） |
+| GET | /api/v1/search/github | 仅 GitHub 仓库搜索 |
 
 ## 项目结构
 

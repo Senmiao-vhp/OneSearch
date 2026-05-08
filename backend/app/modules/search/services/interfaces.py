@@ -5,3 +5,7 @@ class ISearchService(ABC):
     @abstractmethod
     async def search_github(self, query: str, page: int, per_page: int) -> dict:
         pass
+
+    @abstractmethod
+    async def search_repos_merged(self, query: str, page: int, per_page: int) -> dict:
+        pass
