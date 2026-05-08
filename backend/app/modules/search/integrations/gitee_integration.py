@@ -19,7 +19,7 @@ class GiteeIntegration(IGiteeIntegration):
         page: int = 1,
         per_page: int = 10,
     ) -> dict:
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=60.0) as client:
             params: dict = {
                 "q": query,
                 "page": page,

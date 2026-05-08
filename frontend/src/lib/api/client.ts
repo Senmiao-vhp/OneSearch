@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosError, isAxiosError } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
@@ -18,14 +18,31 @@ class ApiClient {
     this.client.interceptors.response.use(
       (response) => response,
       (error: AxiosError) => {
+        if (isAxiosError(error) && error.code === 'ECONNABORTED') {
+          return Promise.reject(new Error('请求超时，合并搜索需访问 GitHub 与 Gitee，请稍后重试或检查网络'));
+        }
+        if (
+          isAxiosError(error) &&
+          typeof error.message === 'string' &&
+          error.message.toLowerCase().includes('timeout')
+        ) {
+          return Promise.reject(new Error('请求超时，合并搜索需访问 GitHub 与 Gitee，请稍后重试或检查网络'));
+        }
         const message = (error.response?.data as any)?.message || error.message;
         return Promise.reject(new Error(message));
       }
     );
   }
 
-  async get<T>(url: string, params?: Record<string, any>): Promise<T> {
-    const response = await this.client.get<T>(url, { params });
+  async get<T>(
+    url: string,
+    params?: Record<string, any>,
+    options?: { timeout?: number }
+  ): Promise<T> {
+    const response = await this.client.get<T>(url, {
+      params,
+      ...(options?.timeout != null ? { timeout: options.timeout } : {}),
+    });
     return response.data;
   }
 
