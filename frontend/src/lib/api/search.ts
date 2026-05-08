@@ -1,5 +1,14 @@
 import { apiClient } from './client';
-import { MergedRepoSearchResponse } from './types';
+import {
+  GithubSearchResponse,
+  CsdnSearchResponse,
+  GiteeSearchResponse,
+  CnkiSearchResponse,
+  GithubSearchItem,
+  CsdnSearchItem,
+  GiteeSearchItem,
+  CnkiSearchItem,
+} from './types';
 
 export interface SearchParams {
   q: string;
@@ -7,15 +16,40 @@ export interface SearchParams {
   per_page?: number;
 }
 
-/** 单次请求拉取 GitHub + Gitee 合并结果；需等双上游，单独放宽超时（毫秒） */
-const SEARCH_MERGED_TIMEOUT_MS = 90_000;
-
 export const searchApi = {
-  searchReposMerged: async (
-    params: SearchParams
-  ): Promise<MergedRepoSearchResponse> => {
-    return apiClient.get('/search/repos', params, {
-      timeout: SEARCH_MERGED_TIMEOUT_MS,
-    });
+  searchGithub: async (params: SearchParams): Promise<{ code: number; message: string; data: GithubSearchResponse }> => {
+    const response = await apiClient.get<GithubSearchResponse>('/search/github', params);
+    return {
+      code: 0,
+      message: 'success',
+      data: response,
+    };
+  },
+
+  searchCsdn: async (params: SearchParams): Promise<{ code: number; message: string; data: CsdnSearchResponse }> => {
+    const response = await apiClient.get<CsdnSearchResponse>('/search/csdn', params);
+    return {
+      code: 0,
+      message: 'success',
+      data: response,
+    };
+  },
+
+  searchGitee: async (params: SearchParams): Promise<{ code: number; message: string; data: GiteeSearchResponse }> => {
+    const response = await apiClient.get<GiteeSearchResponse>('/search/gitee', params);
+    return {
+      code: 0,
+      message: 'success',
+      data: response,
+    };
+  },
+
+  searchCnki: async (params: SearchParams): Promise<{ code: number; message: string; data: CnkiSearchResponse }> => {
+    const response = await apiClient.get<CnkiSearchResponse>('/search/cnki', params);
+    return {
+      code: 0,
+      message: 'success',
+      data: response,
+    };
   },
 };

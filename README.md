@@ -44,6 +44,14 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
+若未先 `activate`，Windows 下也可直接：
+
+```powershell
+venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
+```
+
+务必在 **`backend` 目录**执行，并使用 **`venv` 里的 Python**（否则会报 `No module named 'pydantic_settings'` 等缺少依赖错误）。
+
 访问 http://localhost:8000/docs 查看API文档
 
 自测 GitHub / Gitee 直连耗时（不含业务合并逻辑）：

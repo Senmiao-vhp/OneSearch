@@ -33,10 +33,37 @@ export interface GithubSearchItem {
   updated_at: string;
 }
 
-/** 合并搜索的单条记录（GitHub + Gitee） */
-export type RepoSearchItem = GithubSearchItem & {
-  source: 'github' | 'gitee';
-};
+export interface CsdnSearchItem {
+  id: string;
+  title: string;
+  description?: string;
+  url: string;
+  author?: string;
+  publish_time?: string;
+  views?: number;
+}
+
+export interface GiteeSearchItem {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  stargazers_count: number;
+  language: string | null;
+  updated_at: string;
+}
+
+export interface CnkiSearchItem {
+  id: string;
+  title: string;
+  authors?: string[];
+  journal?: string;
+  year?: number;
+  keywords?: string[];
+  abstract?: string;
+  url?: string;
+}
 
 export interface GithubSearchResponse {
   total_count: number;
@@ -45,12 +72,23 @@ export interface GithubSearchResponse {
   items: GithubSearchItem[];
 }
 
-/** GET /search/repos 单次请求两源合并 */
-export interface MergedRepoSearchResponse {
+export interface CsdnSearchResponse {
+  total: number;
   page: number;
   per_page: number;
-  github_total_count: number;
-  items: RepoSearchItem[];
-  github_error?: string | null;
-  gitee_error?: string | null;
+  items: CsdnSearchItem[];
+}
+
+export interface GiteeSearchResponse {
+  total: number;
+  page: number;
+  per_page: number;
+  items: GiteeSearchItem[];
+}
+
+export interface CnkiSearchResponse {
+  total: number;
+  page: number;
+  per_page: number;
+  items: CnkiSearchItem[];
 }

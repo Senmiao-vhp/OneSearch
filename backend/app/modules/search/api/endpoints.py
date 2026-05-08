@@ -1,15 +1,22 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
-from app.modules.search.schemas.response import GithubSearchResponse, MergedRepoSearchResponse
+from app.modules.search.schemas.response import GithubSearchResponse, MergedRepoSearchResponse, CsdnSearchResponse, GiteeSearchResponse, CnkiSearchResponse
 from app.modules.search.services.search_service import SearchService
 from app.modules.search.integrations.github_integration import GitHubIntegration
 from app.modules.search.integrations.gitee_integration import GiteeIntegration
+from app.modules.search.integrations.csdn_integration import CsdnIntegration
+from app.modules.search.integrations.cnki_integration import CnkiIntegration
 
 
 router = APIRouter(prefix="/search", tags=["搜索"])
 
 
 def get_search_service() -> SearchService:
-    return SearchService(GitHubIntegration(), GiteeIntegration())
+    return SearchService(
+        GitHubIntegration(), 
+        GiteeIntegration(),
+        CsdnIntegration(),
+        CnkiIntegration()
+    )
 
 
 @router.get("/repos", response_model=MergedRepoSearchResponse)
@@ -33,6 +40,51 @@ async def search_github(
     service: SearchService = Depends(get_search_service),
 ):
     result = await service.search_github(
+        query=q,
+        page=page,
+        per_page=per_page
+    )
+    return result
+
+
+@router.get("/gitee", response_model=GiteeSearchResponse)
+async def search_gitee(
+    q: str = Query(..., description="搜索关键词"),
+    page: int = Query(1, ge=1, description="页码"),
+    per_page: int = Query(10, ge=1, le=100, description="每页数量"),
+    service: SearchService = Depends(get_search_service),
+):
+    result = await service.search_gitee(
+        query=q,
+        page=page,
+        per_page=per_page
+    )
+    return result
+
+
+@router.get("/csdn", response_model=CsdnSearchResponse)
+async def search_csdn(
+    q: str = Query(..., description="搜索关键词"),
+    page: int = Query(1, ge=1, description="页码"),
+    per_page: int = Query(10, ge=1, le=100, description="每页数量"),
+    service: SearchService = Depends(get_search_service),
+):
+    result = await service.search_csdn(
+        query=q,
+        page=page,
+        per_page=per_page
+    )
+    return result
+
+
+@router.get("/cnki", response_model=CnkiSearchResponse)
+async def search_cnki(
+    q: str = Query(..., description="搜索关键词"),
+    page: int = Query(1, ge=1, description="页码"),
+    per_page: int = Query(10, ge=1, le=100, description="每页数量"),
+    service: SearchService = Depends(get_search_service),
+):
+    result = await service.search_cnki(
         query=q,
         page=page,
         per_page=per_page

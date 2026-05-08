@@ -1,5 +1,7 @@
 from app.modules.search.services.interfaces import ISearchService
 from app.modules.search.integrations.interfaces import IGitHubIntegration, IGiteeIntegration
+from app.modules.search.integrations.csdn_integration import CsdnIntegration
+from app.modules.search.integrations.cnki_integration import CnkiIntegration
 import asyncio
 
 
@@ -58,9 +60,13 @@ class SearchService(ISearchService):
         self,
         github_integration: IGitHubIntegration,
         gitee_integration: IGiteeIntegration,
+        csdn_integration: CsdnIntegration,
+        cnki_integration: CnkiIntegration,
     ):
         self.github_integration = github_integration
         self.gitee_integration = gitee_integration
+        self.csdn_integration = csdn_integration
+        self.cnki_integration = cnki_integration
 
     async def search_github(self, query: str, page: int, per_page: int) -> dict:
         result = await self.github_integration.search_repositories(
@@ -73,6 +79,41 @@ class SearchService(ISearchService):
             "page": page,
             "per_page": per_page,
             "items": result["items"],
+        }
+
+    async def search_gitee(self, query: str, page: int, per_page: int) -> dict:
+        result = await self.gitee_integration.search_repositories(
+            query=query,
+            page=page,
+            per_page=per_page,
+        )
+        return {
+            "total": result.get("total", 0),
+            "page": page,
+            "per_page": per_page,
+            "items": result.get("items", []),
+        }
+
+    async def search_csdn(self, query: str, page: int, per_page: int) -> dict:
+        result = await self.csdn_integration.search_blogs(
+            query=query,
+            page=page,
+            per_page=per_page,
+        )
+        return {
+            "total": result.get("total", 0),
+            "items": result.get("items", []),
+        }
+
+    async def search_cnki(self, query: str, page: int, per_page: int) -> dict:
+        result = await self.cnki_integration.search_papers(
+            query=query,
+            page=page,
+            per_page=per_page,
+        )
+        return {
+            "total": result.get("total", 0),
+            "items": result.get("items", []),
         }
 
     async def search_repos_merged(self, query: str, page: int, per_page: int) -> dict:
