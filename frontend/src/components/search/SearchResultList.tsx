@@ -23,7 +23,7 @@ export function SearchResultList({ results }: SearchResultListProps) {
         </div>
       )}
       <div className="text-gray-500">
-        GitHub 索引约 {github_total_count.toLocaleString()} 条；本页合并展示 {items.length} 条（按 Star 排序）
+        GitHub 索引约 {github_total_count.toLocaleString()} 条；本页 {items.length} 条（两源各取优质结果后交错合并）
       </div>
       {items.map((item) => (
         <SearchResultCard key={`${item.source}-${item.id}`} item={item} />
