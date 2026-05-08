@@ -26,15 +26,12 @@ class SearchService(ISearchService):
         }
 
     async def search_repos_merged(self, query: str, page: int, per_page: int) -> dict:
-        # 两源各取配额，合并后按 Star 排序再截断到 per_page
-        n_github = (per_page + 1) // 2
-        n_gitee = max(per_page - n_github, 0)
-
+        # 两源各拉满 per_page 条再合并打分；避免「一半给 Gitee」时 Gitee 为空导致本页只有一半条数
         gh_task = self.github_integration.search_repositories(
-            query=query, page=page, per_page=n_github
+            query=query, page=page, per_page=per_page
         )
         gt_task = self.gitee_integration.search_repositories(
-            query=query, page=page, per_page=n_gitee
+            query=query, page=page, per_page=per_page
         )
 
         gh_res, gt_res = await asyncio.gather(gh_task, gt_task, return_exceptions=True)
