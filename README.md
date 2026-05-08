@@ -84,6 +84,8 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 | GET | /api/v1/search/repos | GitHub+Gitee 仓库合并搜索（一次请求、按 Star 合并排序） |
 | GET | /api/v1/search/github | 仅 GitHub 仓库搜索 |
 
+合并策略：GitHub、Gitee **各自**请求至多 `per_page` 条，合并后按 Star 降序取前 `per_page` 条。未配置 `GITEE_ACCESS_TOKEN` 或关键词过短时，Gitee 可能无结果，此时本页仍可满页展示 GitHub。
+
 ## 项目结构
 
 ```
