@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { searchApi, SearchParams } from '@/lib/api/search';
+import { searchApi } from '@/lib/api/search';
 import { useSearchParams } from 'next/navigation';
 
 export function useSearch() {
@@ -14,7 +14,7 @@ export function useSearch() {
   });
 
   return {
-    results: data?.data,
+    results: data,
     isLoading,
     error,
     refetch,
