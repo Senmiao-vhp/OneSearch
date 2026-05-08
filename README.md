@@ -46,6 +46,13 @@ uvicorn app.main:app --reload --port 8000
 
 访问 http://localhost:8000/docs 查看API文档
 
+自测 GitHub / Gitee 直连耗时（不含业务合并逻辑）：
+
+```bash
+# 在 backend 目录下
+python scripts/time_upstream_search.py
+```
+
 ## 环境变量
 
 ### 后端 (.env)

@@ -1,8 +1,16 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.core.http_client import close_upstream_client
 from app.modules.auth.api.endpoints import router as auth_router
 from app.modules.search.api.endpoints import router as search_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    await close_upstream_client()
 
 
 def create_app() -> FastAPI:
@@ -12,6 +20,7 @@ def create_app() -> FastAPI:
         version="1.0.0",
         docs_url="/docs",
         redoc_url="/redoc",
+        lifespan=lifespan,
     )
     
     app.add_middleware(
