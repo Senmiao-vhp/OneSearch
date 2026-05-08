@@ -23,7 +23,7 @@ class GiteeIntegration(IGiteeIntegration):
         params: dict = {
             "q": query,
             "page": page,
-            "per_page": per_page,
+            "perPage": per_page,
             "sort": "stars_count",
             "order": "desc",
         }
